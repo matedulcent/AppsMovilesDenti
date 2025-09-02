@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-
 function Card({ text }) {
   const [active, setActive] = useState(false);
 
