@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-function Card({ text }) {
+function Card({ texto: {text: string } }) {
   const [active, setActive] = useState(false);
 
   return (
@@ -23,7 +23,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       {items.map((item, index) => (
-        <Card key={index} text={item} /> //Use el key porque los children tienen que ser unicos. El text es un prop.
+        <Card key={index} texto={item} /> //Use el key porque los children tienen que ser unicos. El text es un prop.
       ))}
     </View>
   );
