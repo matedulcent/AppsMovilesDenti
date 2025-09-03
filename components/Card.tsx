@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-function Card({ texto }) {
+export default function Card({ texto }: { texto: string }) {
     const [active, setActive] = require("react").useState(false);
 
     return (
@@ -14,9 +14,6 @@ function Card({ texto }) {
         </Pressable>
     );
 }
-
-module.exports = Card; // 👈 export clásico
-
 
 const styles = StyleSheet.create({
     textLabel: {
