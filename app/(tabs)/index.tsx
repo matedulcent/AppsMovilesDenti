@@ -44,7 +44,7 @@ export default function Galeria() {
   const [modalVisible, setModalVisible] = useState(false);
   const [productoSeleccionado, setProductoSeleccionado] = useState<Producto | null>(null);
   const [resizeMode, setResizeMode] = useState<"cover" | "contain" | "stretch">("cover");
-  const [imgKey, setImgKey] = useState(0); // ⚡ para forzar remount
+  const [imgKey, setImgKey] = useState(0);
 
   const handlePress = (item: Producto) => {
     setProductoSeleccionado(item);
