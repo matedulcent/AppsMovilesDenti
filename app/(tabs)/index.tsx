@@ -11,13 +11,12 @@ import {
 } from "react-native";
 import ProductoItem from "../../components/ProductoItem";
 
-// Interfaz para productos
 interface Producto {
   id: string;
   title: string;
   price: number;
   description: string;
-  image: any; // Soporta require(...) y uri
+  image: any;
   favorito: boolean;
 }
 
@@ -91,7 +90,7 @@ export default function Galeria() {
           {productoSeleccionado && (
             <>
               <Image
-                key={imgKey} // ⚡ fuerza remount para RN 0.54
+                key={imgKey} 
                 source={productoSeleccionado.image}
                 style={styles.modalImage}
                 resizeMode={resizeMode}
@@ -106,7 +105,7 @@ export default function Galeria() {
                   style={[styles.button, resizeMode === "stretch" && styles.buttonActive]}
                   onPress={() => {
                     setResizeMode("stretch");
-                    setImgKey((k) => k + 1); // ⚡ forzar remount
+                    setImgKey((k) => k + 1);
                   }}
                 >
                   <Text style={styles.buttonText}>Stretch</Text>
