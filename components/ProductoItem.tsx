@@ -8,11 +8,7 @@ export default function ProductoItem({ item, onPress, onLongPress }) {
             onLongPress={() => onLongPress(item)}
             style={[styles.card, item.favorito && styles.favorito]}
         >
-            <Image
-                source={item.image}
-                style={styles.image}
-                resizeMode="cover"
-            />
+            <Image source={item.image} style={styles.image} resizeMode="cover" />
             <View style={styles.info}>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.price}>${item.price}</Text>
@@ -29,7 +25,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
-        elevation: 3
+        elevation: 3,
     },
     favorito: {
         borderWidth: 2,
@@ -41,14 +37,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         borderRadius: 8,
     },
-    info: {
-        flex: 1,
-    },
-    title: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    price: {
-        color: "green",
-    },
+    info: { flex: 1 },
+    title: { fontSize: 16, fontWeight: "bold" },
+    price: { color: "green" },
 });

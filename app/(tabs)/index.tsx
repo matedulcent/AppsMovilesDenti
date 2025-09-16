@@ -3,21 +3,33 @@ import {
   FlatList,
   Image,
   Modal,
-  Pressable, StyleSheet,
-  Text, TextInput,
-  View
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
 import ProductoItem from "../../components/ProductoItem";
 
+// Interfaz para productos
+interface Producto {
+  id: string;
+  title: string;
+  price: number;
+  description: string;
+  image: any; // Soporta require(...) y uri
+  favorito: boolean;
+}
+
 export default function Galeria() {
   const [search, setSearch] = useState("");
-  const [productos, setProductos] = useState([
+  const [productos, setProductos] = useState<Producto[]>([
     {
       id: "1",
       title: "Mouse Gamer",
       price: 12000,
       description: "Mouse gamer con luces RGB.",
-      image: require("../assets/mouse.png"), // ✅ imagen local
+      image: require("../../assets/images/mouse_gamer.jpg"),
       favorito: false,
     },
     {
@@ -25,25 +37,24 @@ export default function Galeria() {
       title: "Teclado Mecánico",
       price: 35000,
       description: "Teclado mecánico retroiluminado.",
-      image: { uri: "https://i.imgur.com/8Km9tLL.png" }, // ✅ imagen por URL
+      image: { uri: "https://m.media-amazon.com/images/I/71c7t8dP7-L._AC_SL1500_.jpg" },
       favorito: false,
     },
   ]);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [productoSeleccionado, setProductoSeleccionado] = useState(null);
-  const [resizeMode, setResizeMode] = useState("cover");
+  const [productoSeleccionado, setProductoSeleccionado] = useState<Producto | null>(null);
+  const [resizeMode, setResizeMode] = useState<"cover" | "contain" | "stretch">("cover");
+  const [imgKey, setImgKey] = useState(0); // ⚡ para forzar remount
 
-  const handlePress = (item) => {
+  const handlePress = (item: Producto) => {
     setProductoSeleccionado(item);
     setModalVisible(true);
   };
 
-  const handleLongPress = (item) => {
+  const handleLongPress = (item: Producto) => {
     setProductos((prev) =>
-      prev.map((p) =>
-        p.id === item.id ? { ...p, favorito: !p.favorito } : p
-      )
+      prev.map((p) => (p.id === item.id ? { ...p, favorito: !p.favorito } : p))
     );
   };
 
@@ -75,30 +86,31 @@ export default function Galeria() {
       />
 
       {/* Modal de detalle */}
-      <Modal visible={modalVisible} animationType="slide">
+      <Modal visible={modalVisible} animationType="slide" transparent={false}>
         <View style={styles.modalContent}>
           {productoSeleccionado && (
             <>
               <Image
+                key={imgKey} // ⚡ fuerza remount para RN 0.54
                 source={productoSeleccionado.image}
                 style={styles.modalImage}
                 resizeMode={resizeMode}
               />
-              <Text style={styles.modalTitle}>{productoSeleccionado.title}</Text>
-              <Text style={styles.modalDesc}>
-                {productoSeleccionado.description}
-              </Text>
 
+              <Text style={styles.modalTitle}>{productoSeleccionado.title}</Text>
+              <Text style={styles.modalDesc}>{productoSeleccionado.description}</Text>
+
+              {/* Botón Stretch */}
               <View style={styles.buttons}>
-                {["cover", "contain", "stretch"].map((mode) => (
-                  <Pressable
-                    key={mode}
-                    style={styles.button}
-                    onPress={() => setResizeMode(mode)}
-                  >
-                    <Text style={styles.buttonText}>{mode}</Text>
-                  </Pressable>
-                ))}
+                <Pressable
+                  style={[styles.button, resizeMode === "stretch" && styles.buttonActive]}
+                  onPress={() => {
+                    setResizeMode("stretch");
+                    setImgKey((k) => k + 1); // ⚡ forzar remount
+                  }}
+                >
+                  <Text style={styles.buttonText}>Stretch</Text>
+                </Pressable>
               </View>
 
               <Pressable
@@ -126,8 +138,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: "#fff",
   },
-  modalContent: { flex: 1, alignItems: "center", justifyContent: "center", padding: 20 },
-  modalImage: { width: 250, height: 250, marginBottom: 20 },
+  modalContent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+  modalImage: {
+    width: 250,
+    height: 250,
+    marginBottom: 20,
+    backgroundColor: "#eee",
+  },
   modalTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
   modalDesc: { fontSize: 16, marginBottom: 20, textAlign: "center" },
   buttons: { flexDirection: "row", marginBottom: 20 },
@@ -137,5 +159,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 5,
   },
+  buttonActive: { backgroundColor: "#0a84ff" },
   buttonText: { color: "#fff" },
 });
