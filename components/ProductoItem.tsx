@@ -19,13 +19,14 @@ export default function ProductoItem({ item, onPress, onLongPress }) {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: "#fff",
+        backgroundColor: "grey",
         marginVertical: 8,
         padding: 10,
         borderRadius: 10,
         flexDirection: "row",
         alignItems: "center",
         elevation: 3,
+        width: 350,
     },
     favorito: {
         borderWidth: 2,

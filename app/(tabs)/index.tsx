@@ -36,14 +36,19 @@ export default function Galeria() {
       title: "Teclado Mecánico",
       price: 35000,
       description: "Teclado mecánico retroiluminado.",
-      image: { uri: "https://m.media-amazon.com/images/I/71c7t8dP7-L._AC_SL1500_.jpg" },
+      image: {
+        uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXvpDJxiiFnJwrBqnGph5A2mYePQoHfR6alg&s",
+      },
       favorito: false,
     },
   ]);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [productoSeleccionado, setProductoSeleccionado] = useState<Producto | null>(null);
-  const [resizeMode, setResizeMode] = useState<"cover" | "contain" | "stretch">("cover");
+  const [productoSeleccionado, setProductoSeleccionado] =
+    useState<Producto | null>(null);
+  const [resizeMode, setResizeMode] = useState<
+    "cover" | "contain" | "stretch"
+  >("cover");
   const [imgKey, setImgKey] = useState(0);
 
   const handlePress = (item: Producto) => {
@@ -53,7 +58,9 @@ export default function Galeria() {
 
   const handleLongPress = (item: Producto) => {
     setProductos((prev) =>
-      prev.map((p) => (p.id === item.id ? { ...p, favorito: !p.favorito } : p))
+      prev.map((p) =>
+        p.id === item.id ? { ...p, favorito: !p.favorito } : p
+      )
     );
   };
 
@@ -89,27 +96,41 @@ export default function Galeria() {
         <View style={styles.modalContent}>
           {productoSeleccionado && (
             <>
-              <Image
-                key={imgKey} 
-                source={productoSeleccionado.image}
-                style={styles.modalImage}
-                resizeMode={resizeMode}
-              />
+              <View style={styles.imageContainer}>
+                <Image
+                  key={imgKey}
+                  source={productoSeleccionado.image}
+                  style={styles.modalImage}
+                  resizeMode={resizeMode}
+                />
+              </View>
 
-              <Text style={styles.modalTitle}>{productoSeleccionado.title}</Text>
-              <Text style={styles.modalDesc}>{productoSeleccionado.description}</Text>
+              <Text style={styles.modalTitle}>
+                {productoSeleccionado.title}
+              </Text>
+              <Text style={styles.modalDesc}>
+                {productoSeleccionado.description}
+              </Text>
 
-              {/* Botón Stretch */}
+              {/* Botones para cambiar resizeMode */}
               <View style={styles.buttons}>
-                <Pressable
-                  style={[styles.button, resizeMode === "stretch" && styles.buttonActive]}
-                  onPress={() => {
-                    setResizeMode("stretch");
-                    setImgKey((k) => k + 1);
-                  }}
-                >
-                  <Text style={styles.buttonText}>Stretch</Text>
-                </Pressable>
+                {["cover", "contain", "stretch"].map((mode) => (
+                  <Pressable
+                    key={mode}
+                    style={[
+                      styles.button,
+                      resizeMode === mode && styles.buttonActive,
+                    ]}
+                    onPress={() => {
+                      setResizeMode(mode as any);
+                      setImgKey((k) => k + 1);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>
+                      {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                    </Text>
+                  </Pressable>
+                ))}
               </View>
 
               <Pressable
@@ -140,14 +161,18 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
     padding: 20,
+    backgroundColor: "#fff",
   },
-  modalImage: {
-    width: 250,
-    height: 250,
+  imageContainer: {
+    width: "100%",
+    height: 250, // alto fijo para la imagen
     marginBottom: 20,
     backgroundColor: "#eee",
+  },
+  modalImage: {
+    width: "100%",
+    height: "100%",
   },
   modalTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 10 },
   modalDesc: { fontSize: 16, marginBottom: 20, textAlign: "center" },
